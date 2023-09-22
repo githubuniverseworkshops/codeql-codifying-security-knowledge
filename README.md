@@ -1,5 +1,6 @@
-<h1 align="center">Workshop Title</h1>
-<h5 align="center">@facilitators</h3>
+<h1 align="center">Codifying security knowledge</h1>
+<h3 align="center">Going from security advisory to CodeQL query</h3>
+<h5 align="center">@thezefan, @lcartey, @rvermeulen</h3>
 
 <p align="center">
   <a href="#mega-prerequisites">Prerequisites</a> •  
@@ -9,9 +10,9 @@
 
 > Please provide a description of your workshop.
 
-- **Who is this for**: TBD
-- **What you'll learn**: TBD
-- **What you'll build**: TBD
+- **Who is this for**: Security Engineers, Security Researchers, Developers.
+- **What you'll learn**: Learn how to use CodeQL for code exploration and for finding security issues.
+- **What you'll build**: Build a CodeQL query based on a security advisory to find a SQL injection.
 
 ## Learning Objectives
 
@@ -23,9 +24,9 @@ In this workshop, you will:
 
 ## :mega: Prerequisites
 Before joining the workshop, there are a few items that you will need to install or bring with you.
-- point 1
-- point 2
+- Install [Visual Studio Code](https://code.visualstudio.com/)
+- Install the [CodeQL extension](https://marketplace.visualstudio.com/items?itemName=github.vscode-codeql)
 
 ## :books: Resources
-- [Resource 1]()
-- [Resource 2]()
+- [CodeQL documentation](https://codeql.github.com/docs/)
+- [SQL injection](https://portswigger.net/web-security/sql-injection)
