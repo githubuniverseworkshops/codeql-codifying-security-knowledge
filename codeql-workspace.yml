@@ -1,0 +1,3 @@
+provide:
+  - java/*/src/qlpack.yml
+  - java/*/test/qlpack.yml
