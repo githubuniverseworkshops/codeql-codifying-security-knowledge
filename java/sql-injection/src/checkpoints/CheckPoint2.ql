@@ -5,17 +5,17 @@ import java
 // where ma.getMethod().hasName("search")
 // select ma
 
-// Find the fully qualified name of declaring type of the method search
+// Find the fully qualified name of declaring type of the method search that is called in `getAverageRatingFromQuery`
 // from MethodAccess ma, Method m
 // where ma.getMethod() = m and 
-// m.hasName("search")
-// select ma, m.getDeclaringType().getQualifiedName()
+// m.hasName("search") and
+// ma.getEnclosingCallable().hasName("getAverageRatingFromQuery")
+// select ma, m.getQualifiedName()
 
 // Abstract the above query into a class
 class XWikiSearchMethod extends Method {
     XWikiSearchMethod() {
-        this.hasName("search")
-        and this.getDeclaringType().getQualifiedName() in ["com.xpn.xwiki.XWiki", "com.xpn.xwiki.store.XWikiStoreInterface"]
+        this.hasQualifiedName("com.xpn.xwiki.store","XWikiStoreInterface","search")
     }
 }
 
@@ -28,7 +28,7 @@ import semmle.code.java.security.SqlInjectionQuery
 
 class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
     XWikiSearchSqlInjectionSink() {
-        any(XWikiSearchMethod m).getAReference().getArgument(0) =  this.asExpr()
+        any(XWikiSearchMethod m).getAPossibleImplementation().getParameter(0) = this.asParameter()
     }
 }
 
