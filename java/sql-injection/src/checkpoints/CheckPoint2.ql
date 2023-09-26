@@ -28,7 +28,7 @@ import semmle.code.java.security.SqlInjectionQuery
 
 class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
     XWikiSearchSqlInjectionSink() {
-        any(XWikiSearchMethod m).getAPossibleImplementation().getParameter(0) = this.asParameter()
+        any(XWikiSearchMethod m).getAReference().getArgument(0) = this.asExpr()
     }
 }
 

@@ -13,7 +13,7 @@ class XWikiSearchMethod extends Method {
 
 class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
     XWikiSearchSqlInjectionSink() {
-        any(XWikiSearchMethod m).getAPossibleImplementation().getParameter(0) = this.asParameter()
+        any(XWikiSearchMethod m).getAReference().getArgument(0) = this.asExpr()
     }
 }
 
