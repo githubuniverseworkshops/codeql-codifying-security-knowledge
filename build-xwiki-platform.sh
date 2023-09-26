@@ -5,6 +5,6 @@ unzip codeql-linux64.zip
 
 export PATH=$PATH:$PWD/codeql
 
-codeql database create --language java --source-root xwiki-platform xwiki-platform-db
-codeql database bundle -o /data/xwiki-platform-db.zip xwiki-platform-db
-chown 1000:1000 /data/xwiki-platform-db.zip
+codeql database create --language java --source-root xwiki-platform xwiki-platform-12.8-db
+codeql database bundle -o /data/xwiki-platform-db.zip xwiki-platform-db-12.8
+chown 1000:1000 /data/xwiki-platform-12.8-db.zip
