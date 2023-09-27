@@ -37,31 +37,34 @@ import SQLInjectionTaintTracking::PathGraph
 
 // The vulnerable method `getAverageRatingFromQuery` is implemented by the abstract class `AbstractRatingsManager`.
 // Let's find all the classes that `extend` from it.
-// from Class impl
-// where impl.getASourceSupertype().hasName("AbstractRatingsManager")
-// select impl
+// from Class subclass, Class abstractRatingsManager
+// where abstractRatingsManager.hasName("AbstractRatingsManager") and subclass.extendsOrImplements(abstractRatingsManager)
+// select subclass
 
 // We found 3 classes that `extend` from `AbstractRatingsManager`.
 // They all are XWiki Components as gathered from the annotation `org.xwiki.component.annotation.Component`
 // A component is accessible from wiki pages if it implements `org.xwiki.script.service.ScriptService` (see https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/Tutorials/WritingComponents/#HFromwikipages)
 // Let's find all the classes that `implement` `org.xwiki.script.service.ScriptService`
-// from Class impl
-// where impl.getASourceSupertype().hasQualifiedName("org.xwiki.script.service", "ScriptService") and
-//    impl.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component")
-// select impl
+// from Class component, Interface scriptService
+// where scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
+//     component.extendsOrImplements(scriptService) and
+//     component.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component")
+// select component
 
-// Let's turn the above from...select into a class so we can reuse it
-class ScriptableComponent extends Class {
-    ScriptableComponent() {
-        this.getASourceSupertype().hasQualifiedName("org.xwiki.script.service", "ScriptService") and
-        this.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component")
+// Let's turn the above select clause into a class so we can reuse it
+class XWikiScriptableComponent extends Class {
+    XWikiScriptableComponent() {
+        exists(Interface scriptService |
+        scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
+        this.extendsOrImplements(scriptService) and
+        this.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component"))
     }
 }
 
 // Let's turn all the parameters of a public method on a ScriptableComponent into a source of untrusted input.
-class ScriptableComponentSource extends RemoteFlowSource {
-    ScriptableComponentSource() {
-        exists(ScriptableComponent c, Method m | c.getAMethod() = m and m.isPublic() |
+class XWikiScriptableComponentSource extends RemoteFlowSource {
+    XWikiScriptableComponentSource() {
+        exists(XWikiScriptableComponent c, Method m | c.getAMethod() = m and m.isPublic() |
             m.getAParameter() = this.asParameter()
         )
     }
@@ -73,5 +76,5 @@ class ScriptableComponentSource extends RemoteFlowSource {
 
 // Let's test our new source to see if we can find a path to our sink. (Don't forget to re-enable the @kind meta data on the query above)
 from SQLInjectionTaintTracking::PathNode source, SQLInjectionTaintTracking::PathNode sink
-where SQLInjectionTaintTracking::flowPath(source, sink) //and sink.getNode() instanceof XWikiSearchSqlInjectionSink
+where SQLInjectionTaintTracking::flowPath(source, sink)
 select sink, source, sink, "Found SQL injection from $@", source, "source"
