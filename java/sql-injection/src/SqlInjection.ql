@@ -1,4 +1,6 @@
 /**
+ * @id java/xwiki-sql-injection
+ * @problem.severity error
  * @kind path-problem
  */
 
