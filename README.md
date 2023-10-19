@@ -28,7 +28,9 @@ Before joining the workshop, there are a few items that you will need to install
 
 - Install [Visual Studio Code](https://code.visualstudio.com/).
 - Install the [CodeQL extension](https://marketplace.visualstudio.com/items?itemName=github.vscode-codeql).
+  ![Screenrecording demonstrating how to install the CodeQL extension](./assets/images/install-codeql-extension.gif)
 - Install the required CodeQL pack dependencies by running the command `CodeQL: Install pack dependencies` to install the dependencies for the pack `githubuniverseworkshop/sql-injection-queries`.
+  ![Screenrecording demonstrating how to install CodeQL pack dependencies](./assets/images/install-codeql-pack-deps.gif)
 - Install [git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) to download the prepared databases or build the databases locally using the provide Make file. The Makefile requires the presence of [Docker](https://www.docker.com/).
 
 To test your setup perform the steps:
@@ -38,6 +40,8 @@ To test your setup perform the steps:
 3. See the result `Hello GitHub Universe!` in the *CodeQL Query Results* pane.
 
 If you run into issues with your setup feel free to ask for support at the start of the workshop.
+
+![Screencast demonstrating how to test your setup](./assets/images/test-setup.gif)
 
 ## :books: Resources
 
