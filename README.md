@@ -31,6 +31,14 @@ Before joining the workshop, there are a few items that you will need to install
 - Install the required CodeQL pack dependencies by running the command `CodeQL: Install pack dependencies` to install the dependencies for the pack `githubuniverseworkshop/sql-injection-queries`.
 - Install [git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage) to download the prepared databases or build the databases locally using the provide Make file. The Makefile requires the presence of [Docker](https://www.docker.com/).
 
+To test your setup perform the steps:
+
+1. Right-click on the file [xwiki-platform-ratings-api-12.8-db.zip](./xwiki-platform-ratings-api-12.8-db.zip) and run the command `CodeQL: Set Current Database`.
+2. Right-click on the file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql) and run the command `CodeQL: Run Queries in Selected Files`.
+3. See the result `Hello GitHub Universe!` in the *CodeQL Query Results* pane.
+
+If you run into issues with your setup feel free to ask for support at the start of the workshop.
+
 ## :books: Resources
 
 - [CodeQL documentation](https://codeql.github.com/docs/)
@@ -79,6 +87,8 @@ We will use CodeQL to find the method and use the results to better understand h
 
 Select the database [xwiki-platform-ratings-api-12.8-db.zip] as the current database by right-clicking on it in the _Explorer_ and executing the command _CodeQL: Set current database_.
 
+The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
+
 1. Find all the methods with the name `getAverageRating`
    <details>
    <summary>Hints</summary>
@@ -106,8 +116,8 @@ Select the database [xwiki-platform-ratings-api-12.8-db.zip] as the current data
 
 ### 2. Identifying and modelling a SQL sink
 
-Following the use of `sql`, we can see it is passed to a method `search`.
-In the following exercises we are going to use CodeQL to investigate the `search` method.
+The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
+You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
 
 1. Find all the calls to a method named `search`.
    <details>
@@ -145,6 +155,7 @@ In the following exercises we are going to use CodeQL to investigate the `search
 6. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of a method access to the method `search`  a _sink_.
    <details>
    <summary>Hints</summary>
+   - The `QueryInjectionSink` can be imported from the `SqlInjectionQuery` module using `import semmle.code.java.security.SqlInjectionQuery`
    - The `QueryInjectionSink` is a subclass of `DataFlow::Node`, so it represents a node in the dataflow graph.
      You can use the member predicate `asExpr` to find a corresponding AST node.
    - The class `Method` has a member predicate `getAReference`, that is inherited by our class `XWikiSearchMethod`, that provides all the method accesses targeting that method.
@@ -153,7 +164,8 @@ In the following exercises we are going to use CodeQL to investigate the `search
 
 ### 3 Attack surface and sources
 
-You can copy [CheckPoint2.ql](java/sql-injection/src/checkpoints/CheckPoint2.ql) to continue.
+The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
+You can use [CheckPoint2.ql](./java/sql-injection/src/checkpoints/CheckPoint2.ql) as a starting point if you were unable to complete the previous section.
 
 1. Find all the method accesses of the method `search`.
    <details>
@@ -196,8 +208,5 @@ You can copy [CheckPoint2.ql](java/sql-injection/src/checkpoints/CheckPoint2.ql)
 
    </details>
 
-### 4. Variant analysis
-
-With our fresh query we can now look if our freshly codified security knowledge can find variants.
-Select the database [xwiki-platform-12.8-db.zip](xwiki-platform-12.8-db.zip) as the current database and re-run the query.
-To get a good sense of the newly found variants, comment out the definition of the `XWikiScriptableComponentSource` and compare the differences in results.
+With the final query we can commence with variant analysis.
+You can use [CheckPoint3.ql](./java/sql-injection/src/checkpoints/CheckPoint3.ql) as a starting point if you were unable to complete the this section.
