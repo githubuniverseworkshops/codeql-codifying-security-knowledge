@@ -1,8 +1,0 @@
----
-library: false
-warnOnImplicitThis: false
-name: githubuniverseworkshop/sql-injection-tests
-version: 0.0.1
-extractor: java
-dependencies:
-  "githubuniverseworkshop/sql-injection-queries": "0.0.1"
