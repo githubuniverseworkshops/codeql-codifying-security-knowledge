@@ -16,11 +16,12 @@
 
 ## Learning Objectives
 
-In this workshop, you will:
+In this workshop will cover the following learning objectives:
 
-- Learn how to use CodeQL to explore a code base.
-- Learn how to use CodeQL to codify security knowledge and find a SQL injection issue.
-- Learn how to reuse codified security knowledge to find variants or new security issues.
+- Understand how to use CodeQL in exploration and identification of security vulnerabilities.
+- Be able to codify a security vulnerability as a CodeQL query.
+- Be able to refine queries to find variants and increase precision.
+- Understand how refined queries can be integrated into the developer workflow to prevent future vulnerabilities.
 
 ## :mega: Prerequisites
 
