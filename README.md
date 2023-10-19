@@ -59,11 +59,11 @@ In this workshop we will apply CodeQL to gain a better understanding of a securi
 Before we get started it is important that all of the prerequisites are met so you can participate in the workshop.
 
 The workshop is divided into multiple sections and each section consists of exercises that build up to the final query.
-For each section we provide _hints_ that help you finish the exercise by providing you with references to QL classes and member predicates that you can use.
+For each section we provide *hints* that help you finish the exercise by providing you with references to QL classes and member predicates that you can use.
 
 ### Overview
 
-In this workshop we will look for a known _SQL injection vulnerabilities_ in the [XWiki Platform](https://xwiki.org)'s ratings API component. Such vulnerabilities can occur in applications when information that is controlled by a user makes its way to application code that insecurely construct a SQL query and executes it. SQL queries insecurely constructed from user input can be rewritten to perform unintended actions such as the disclosure of sensitive information.
+In this workshop we will look for a known *SQL injection vulnerabilities* in the [XWiki Platform](https://xwiki.org)'s ratings API component. Such vulnerabilities can occur in applications when information that is controlled by a user makes its way to application code that insecurely construct a SQL query and executes it. SQL queries insecurely constructed from user input can be rewritten to perform unintended actions such as the disclosure of sensitive information.
 
 The SQL injection discussed in this workshop is reviewed in [GHSA-79rg-7mv3-jrr5](https://github.com/advisories/GHSA-79rg-7mv3-jrr5) in [GitHub Advisory Database](https://github.com/advisories).
 
@@ -85,12 +85,12 @@ In the security advisory [GHSA-79rg-7mv3-jrr5](https://github.com/advisories/GHS
 
 From the Jira issue we learn that:
 
-1. There exists a method `getAverageRating` in the _Rating Script Service_.
+1. There exists a method `getAverageRating` in the *Rating Script Service*.
 2. The two parameters of `getAverageRating` are used in the class `AbstractRatingManager` to insecurely construct a SQL statement.
 
 We will use CodeQL to find the method and use the results to better understand how the SQL injection can manifest.
 
-Select the database [xwiki-platform-ratings-api-12.8-db.zip] as the current database by right-clicking on it in the _Explorer_ and executing the command _CodeQL: Set current database_.
+Select the database [xwiki-platform-ratings-api-12.8-db.zip] as the current database by right-clicking on it in the *Explorer* and executing the command *CodeQL: Set current database*.
 
 The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
 
@@ -163,7 +163,7 @@ You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html), which `XWikiSearchMethod` *extends*, provides the member predicate [getAReference](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Method$getAReference.0.html) that returns all the [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html)es referring the method.
    - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) and [getAnArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getAnArgument.0.html) to reason about arguments used by the method call.
    <details>
-3. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of an invocation to the method `search`  a _sink_.
+3. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of an invocation to the method `search`  a *sink*.
    <details>
    <summary>Hints</summary>
    - The `QueryInjectionSink` can be imported from the `SqlInjectionQuery` module using `import semmle.code.java.security.SqlInjectionQuery`
