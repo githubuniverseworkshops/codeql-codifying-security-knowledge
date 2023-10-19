@@ -118,37 +118,37 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
    - The class `Method` provides the member predicates `getBody` to reason about the statements that constitute a method.
    - You can use the quantifier `exists` like `not exists(foo())` to determine if a predicate has no results.
    </details>
-
-### 2. Identifying and modelling a SQL sink
-
-The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
-You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
-
-1. Find all the calls to a method named `search`.
+5. Find all the calls to a method named `search`.
    <details>
    <summary>Hints</summary>
    - Calls to methods are method accesses. The class `MethodAccess` allows you to reason about method accesses.
    - The class `MethodAccess` provides a member predicate `getMethod` allows you to reason about the method being accessed.
    - The class `MethodAccess` provides the member predicates `getName` and `hasName` to reason about the name of a method.
    </details>
-2. Find all the method accesses in the method `getAverageRatingFromQuery`.
+6. Find all the method accesses in the method `getAverageRatingFromQuery`.
    <details>
    <summary>Hints</summary>
    - The class `MethodAccess` provides the member predicate [getEnclosingCallable](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getEnclosingCallable.0.html) to reason about the method or constructor containing the method access.
    - The class [Callable](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Callable.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
    </details>
-3. Select the qualified name of the method `search`.
+7. Select the qualified name of the method `search`.
    <details>
    <summary>Hints</summary>
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$getQualifiedName.0.html) useful fore debugging. The more efficient [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$hasQualifiedName.3.html) for restricting a method.
    </details>
-4. Use the qualified name of the method `search` to uniquely identify it.
+8. Use the qualified name of the method `search` to uniquely identify it.
    <details>
    <summary>Hints</summary>
    - Use the `where` clause to restrict the results of the query.
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$getQualifiedName.0.html) useful fore debugging. The more efficient [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$hasQualifiedName.3.html) for restricting a method.
    </details>
-5. Transform the `select` clause into a class with the name `XWikiSearchMethod`
+
+### 2. Identifying and modelling a SQL sink
+
+The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
+You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
+
+1. Transform the `select` clause into a class with the name `XWikiSearchMethod`
    <details>
    <summary>Hints</summary>
    - The steps for transforming a `select` clause into a class are:
@@ -157,7 +157,13 @@ You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql
       3. Replace the variable with type the class `extends` from with the `this` variable.
       4. If the class relies on other variables from the `from` part then you can wrap the body of the characteristic predicate with an [exists](https://codeql.github.com/docs/ql-language-reference/formulas/#exists) quantifier to introduce those variable.
    </details>
-6. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of a method access to the method `search`  a _sink_.
+2. Find the first argument of all the invocations of the `search` method.
+   <details>
+   <summary>Hints</summary>
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html), which `XWikiSearchMethod` *extends*, provides the member predicate [getAReference](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Method$getAReference.0.html) that returns all the [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html)es referring the method.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) and [getAnArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getAnArgument.0.html) to reason about arguments used by the method call.
+   <details>
+3. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of an invocation to the method `search`  a _sink_.
    <details>
    <summary>Hints</summary>
    - The `QueryInjectionSink` can be imported from the `SqlInjectionQuery` module using `import semmle.code.java.security.SqlInjectionQuery`
@@ -172,30 +178,23 @@ You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql
 The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
 You can use [CheckPoint2.ql](./java/sql-injection/src/checkpoints/CheckPoint2.ql) as a starting point if you were unable to complete the previous section.
 
-1. Find all the method accesses of the method `search`.
+1. Write a query that finds classes annotated with `org.xwiki.component.annotation.Component`.
    <details>
    <summary>Hints</summary>
-   - You can reuse your class `XWikiSearchMethod`.
-   - The class `Method` provides the member predicate `getAReference`, that is inherited by our class `XWikiSearchMethod`, providing all the method access of the method.
-    </details>
-2. Find all the classes that extend the abstract class `AbstractRatingsManager`.
-   <details>
-   <summary>Hints</summary>
-   - The class `Class` represent all the classes in the program.
-   - The class `Class` provides the member predicates `getName` and `hasName` to reason about the name of a class.
-   - The class `Class` provides the member predicate `extendsOrImplements`  that holds if the provide type is an immediate super-type part of the `extends` or `implements` relationship.
-   </details>
-3. Write a query that finds classes annotated with `org.xwiki.component.annotation.Component` and implement the interface `org.xwiki.script.service.ScriptService`.
-   <details>
-   <summary>Hints</summary>
-   - The class `Interface` represents all the Java interfaces in a program.
-   - The class `Interface` provides the member predicates `getQualifedName` and `hasQualifiedName` to reason about the qualified name of an Java interface.
    - The class `Class` provides the member predicate `getAnAnnotation` to get the annotation that apply to the class.
    - User defined annotations are declared using an [annotation type](https://docs.oracle.com/javase/tutorial/java/annotations/declaring.html). The class `Annotation`, returned by `getAnAnnotation`, provides the member predicate `getType` to get the annotation type of an annotation.
    - The type `AnnotationType` is a specialization of an interface and allows us, among others, to reason about it's qualified name using the member predicates `getQualifiedName` and `hasQualifiedName`.
    </details>
-4. Transform the `select` clause into the class `XWikiScriptableComponent`.
-5. Write a class `XWikiScriptableComponentSource` that extends the class `RemoteFlowSource` and identifies parameters of the public methods defined in a scriptable component as sources of untrusted data.
+2. Extend the query to include only classes that implement the interface `org.xwiki.script.service.ScriptService`.
+   <details>
+   <summary>Hints</summary>
+   - The class `Interface` represents all the Java interfaces in a program.
+   - The class `Interface` provides the member predicates `getQualifedName` and `hasQualifiedName` to reason about the qualified name of an Java interface.
+   </details>
+3. Transform the `select` clause into the class `XWikiScriptableComponent`.
+4. Use the class `XWikiScriptableComponent` and find all the public methods.
+5. Extends the query to find all the parameters of the just found public methods.
+6. Transform the `select` clause into the  class `XWikiScriptableComponentSource` that extends the class `RemoteFlowSource` and identifies parameters of the public methods defined in a scriptable component as sources of untrusted data.
    <details>
    <summary>Hints</summary>
    - Reuse the class `XWikiScriptableComponentSource`, a subclass of `Class`, to reason about scriptable components.
@@ -207,11 +206,33 @@ You can use [CheckPoint2.ql](./java/sql-injection/src/checkpoints/CheckPoint2.ql
 
      ```ql
       override string getSourceType() {
-         result = "XWiki scriptable component
+         result = "XWiki scriptable component"
       }
      ```
 
    </details>
+7. Use the modelled source and sink in combination with the existing [QueryInjectionFlowConfig](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/SqlInjectionQuery.qll/module.SqlInjectionQuery$QueryInjectionFlowConfig.html) to find the vulnerability as follows:
+   1. At the top of the query add meta data to inform the CodeQL Query Results viewer to provide data flow paths.
+
+      ```ql
+      /**
+      * @kind path-problem
+      */
+      ```
+
+   2. Import the module `QueryInjectionFlow::PathGraph` that will construct the data flow paths for the CodeQL Query Results viewer
+
+      ```ql
+      import QueryInjectionFlow::PathGraph
+      ```
+
+   3. Use the `QueryInjectionFlow` module to find paths between remote flow sources and SQL injection sinks.
+
+      ```ql
+      from QueryInjectionFlow::PathNode source, QueryInjectionFlow::PathNode sink
+      where QueryInjectionFlow::flowPath(source, sink)
+      select sink, source, sink, "Found SQL injection from $@", source, "source"
+      ```
 
 With the final query we can commence with variant analysis.
 You can use [CheckPoint3.ql](./java/sql-injection/src/checkpoints/CheckPoint3.ql) as a starting point if you were unable to complete the this section.
