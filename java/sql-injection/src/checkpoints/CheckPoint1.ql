@@ -9,9 +9,12 @@ import java
 // where m.hasName("getAverageRating")
 // select m
 
-// Find all the methods named getAverageRating and where the first parameters is name fromSql
+// Find all the methods named getAverageRating, accepts two parameters and where the first parameters is name fromSql
 // from Method m
-// where m.hasName("getAverageRating") and m.getParameter(0).hasName("fromsql")
+// where 
+//     m.hasName("getAverageRating") and
+//     m.getNumberOfParameters() = 2 and
+//     m.getParameter(0).hasName("fromsql")
 // select m
 
 // Find all the methods named getAverageRatingFromQuery
@@ -31,8 +34,18 @@ import java
 // select ma
 
 // Find the fully qualified name of declaring type of the method search that is called in `getAverageRatingFromQuery`
+// from MethodAccess ma, Method m
+// where 
+//     ma.getMethod() = m and 
+//     m.hasName("search") and
+//     ma.getEnclosingCallable().hasName("getAverageRatingFromQuery") 
+// select ma, m.getQualifiedName()
+
+// Filter out the results with the qualified name of the method search
 from MethodAccess ma, Method m
-where ma.getMethod() = m and 
+where 
+    ma.getMethod() = m and 
     m.hasName("search") and
-    ma.getEnclosingCallable().hasName("getAverageRatingFromQuery")
+    ma.getEnclosingCallable().hasName("getAverageRatingFromQuery")  and 
+    m.hasQualifiedName("com.xpn.xwiki.store", "XWikiStoreInterface", "search")
 select ma, m.getQualifiedName()
