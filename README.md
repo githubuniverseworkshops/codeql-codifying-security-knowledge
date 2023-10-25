@@ -8,8 +8,6 @@
   <a href="#learning-objectives">Learning Objectives</a>
 </p>
 
-> Please provide a description of your workshop.
-
 - **Who is this for**: Security Engineers, Security Researchers, Developers.
 - **What you'll learn**: Learn how to use CodeQL for code exploration and for finding security issues.
 - **What you'll build**: Build a CodeQL query based on a security advisory to find a SQL injection.
