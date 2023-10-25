@@ -180,18 +180,7 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
 The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
 You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
 
-1. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into a class with the name `XWikiSearchMethod`
-   <details>
-   <summary>Hints</summary>
-
-   The steps for transforming a [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into a class are:
-   1. [Define a class](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class) and it's [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates). It will extend, through [extends](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class), from the class used in the [from](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part of your [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses).
-   2. Copy the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part from the [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) into the [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates).
-   3. Replace the variable with type the class [extends](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class) from with the [this](https://codeql.github.com/docs/ql-language-reference/types/#character-types) variable.
-   4. If the class relies on other variables from the [from](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part then you can wrap the body of the characteristic predicate with an [exists](https://codeql.github.com/docs/ql-language-reference/formulas/#exists) quantifier to introduce those variable.
-
-   </details>
-2. Find the first argument of all the invocations of the `search` method.
+1. Find the first argument of all the method calls to `search` method.
    <details>
    <summary>Hints</summary>
 
@@ -199,17 +188,30 @@ You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql
    - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) and [getAnArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getAnArgument.0.html) to reason about arguments used by the method call.
 
    <details>
-3. Create the class `XWikiSearchSqlInjectionSink` that extends the [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) class to mark the first argument of an invocation to the method `search`  a *sink*.
-   <details>
-   <summary>Hints</summary>
 
-   - The [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) can be imported through the [SqlInjectionQuery](https://github.com/github/codeql/blob/c7b9e405b77ffdc82b3f48e740cf5af0cfbeb028/java/ql/lib/semmle/code/java/security/SqlInjectionQuery.qll) module using `import semmle.code.java.security.SqlInjectionQuery`
-   - The [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) is a subclass of [DataFlow::Node](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/internal/DataFlowNodes.qll/type.DataFlowNodes$Public$Node.html), so it represents a node in the dataflow graph.
-     You can use the member predicate [asExpr](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/internal/DataFlowNodes.qll/predicate.DataFlowNodes$Public$Node$asExpr.0.html) to find a corresponding AST node.
-   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides a member predicate [getMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getMethod.0.html) allows you to reason about the method being accessed.
-   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) has a member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) that provided an index returns the nth argument provided to the method access.
+To inform the data flow analysis of our new sink we must extend the class [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) with the logic of our [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses)
 
-   <details>
+Replace your [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) with the following query:
+
+```ql
+// Import the SQL injection data flow configuration and extensions points.
+import semmle.code.java.security.SqlInjectionQuery
+
+class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
+    XWikiSearchSqlInjectionSink() {
+      exists(Method searchMethod, MethodAccess searchMethodInvocation, Expr firstArg |
+        searchMethod.hasQualifiedName("com.xpn.xwiki.store", "XWikiStoreInterface", "search") and
+        searchMethod = searchMethodInvocation.getMethod() and
+        searchMethodInvocation.getArgument(0) = firstArg
+      |
+        firstArg = this.asExpr()
+      )
+    }
+}
+
+from QueryInjectionSink sink
+select sink
+```
 
 ### 3 Attack surface and sources
 
@@ -231,50 +233,57 @@ You can use [CheckPoint2.ql](./java/sql-injection/src/checkpoints/CheckPoint2.ql
    - The class [Interface](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Interface.html) provides the member predicates [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$getQualifiedName.0.html) and [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$hasQualifiedName.2.html) to reason about the qualified name of an Java interface.
 
    </details>
-3. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into the class `XWikiScriptableComponent`.
-4. Use the class `XWikiScriptableComponent` and find all the public methods.
-5. Extends the query to find all the parameters of the just found public methods.
-6. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into the  class `XWikiScriptableComponentSource` that extends the class [RemoteFlowSource](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/type.FlowSources$RemoteFlowSource.html) and identifies parameters of the public methods defined in a scriptable component as sources of untrusted data.
-
+3. Extends the query to find all the parameters of the just found public methods.
    <details>
    <summary>Hints</summary>
 
-   - Reuse the class `XWikiScriptableComponentSource`, a subclass of [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html), to reason about scriptable components.
-   - The class [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html) provides the member predicate [getAMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$getAMethod.0.html) to get the Java methods that belong to a java class.
+   - The class [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html) provides the member predicate [getAMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$getAMethod.0.html) to reason about method declared by a class.
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [isPublic](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Method$isPublic.0.html) to determine if a method is publicly accessible.
-   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) and [getAParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getAParameter.0.html) to reason about parameters associated with a Java method.
-   - Subclasses of [RemoteFlowSource](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/type.FlowSources$RemoteFlowSource.html) require the implementation of a member predicate [getSourceType](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/predicate.FlowSources$RemoteFlowSource$getSourceType.0.html) to describe the type of the source.
-     Use the following implementation:
-
-     ```ql
-      override string getSourceType() {
-         result = "XWiki scriptable component"
-      }
-     ```
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) and [getAParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getAParameter.0.html) to reason about a method's parameters.
 
    </details>
-7. Use the modelled source and sink in combination with the existing [QueryInjectionFlowConfig](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/SqlInjectionQuery.qll/module.SqlInjectionQuery$QueryInjectionFlowConfig.html) to find the vulnerability as follows:
-   1. At the top of the query add meta data to inform the CodeQL Query Results viewer to provide data flow paths.
 
-      ```ql
-      /**
-      * @kind path-problem
-      */
-      ```
+To inform the data flow analysis of our new source we must extend the class [RemoteFlowSource](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/type.FlowSources$RemoteFlowSource.html) with the logic of our [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses)
 
-   2. Import the module `QueryInjectionFlow::PathGraph` that will construct the data flow paths for the CodeQL Query Results viewer
+1. Replace your [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) with the following query:
 
-      ```ql
-      import QueryInjectionFlow::PathGraph
-      ```
+   ```ql
+   class XWikiScriptableComponentSource extends RemoteFlowSource {
+      XWikiScriptableComponentSource() {
+         exists(Class component, Interface scriptService, Method publicMethod, Parameter parameter |
+            component
+                  .getAnAnnotation()
+                  .getType()
+                  .hasQualifiedName("org.xwiki.component.annotation", "Component") and
+            scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
+            component.extendsOrImplements(scriptService) and
+            component.getAMethod() = publicMethod and
+            publicMethod.isPublic() and
+            publicMethod.getAParameter() = parameter
+            |
+            this.asParameter() = parameter
+         )
+      }
 
-   3. Use the `QueryInjectionFlow` module to find paths between remote flow sources and SQL injection sinks.
+      override string getSourceType() { result = "XWiki scriptable component" }
+   }
 
-      ```ql
-      from QueryInjectionFlow::PathNode source, QueryInjectionFlow::PathNode sink
-      where QueryInjectionFlow::flowPath(source, sink)
-      select sink, source, sink, "Found SQL injection from $@", source, "source"
-      ```
+   import QueryInjectionFlow::PathGraph
+
+   from QueryInjectionFlow::PathNode source, QueryInjectionFlow::PathNode sink
+   where QueryInjectionFlow::flowPath(source, sink)
+   select sink, source, sink, "Found SQL injection from $@", source, "source"
+   ```
+
+2. Add the top of your query file, add the following meta data to inform the CodeQL Result Viewer to display paths.
+
+   ```ql
+   /**
+   * @kind path-problem
+   */
+   ```
+
+3. Run you query.
 
 With the final query we can commence with variant analysis.
 You can use [CheckPoint3.ql](./java/sql-injection/src/checkpoints/CheckPoint3.ql) as a starting point if you were unable to complete the this section.

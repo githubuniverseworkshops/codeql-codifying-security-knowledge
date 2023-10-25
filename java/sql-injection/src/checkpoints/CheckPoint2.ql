@@ -32,21 +32,16 @@ import java
 
 // Find the fully qualified name of declaring type of the method search that is called in `getAverageRatingFromQuery`
 // from MethodAccess ma, Method m
-// where ma.getMethod() = m and 
+// where ma.getMethod() = m and
 //     m.hasName("search") and
 //     ma.getEnclosingCallable().hasName("getAverageRatingFromQuery")
 // select ma, m.getQualifiedName()
 
-// Abstract the above query into a class
-class XWikiSearchMethod extends Method {
-    XWikiSearchMethod() {
-        this.hasQualifiedName("com.xpn.xwiki.store","XWikiStoreInterface","search")
-    }
-}
 
-// Find the first argument of all the invocations of the method search
-// from XWikiSearchMethod searchMethod, MethodAccess searchMethodInvocation, Expr firstArg
-// where searchMethod.getAReference() = searchMethodInvocation and
+// Find the search method call and its first argument.
+// from Method searchMethod, MethodAccess searchMethodInvocation, Expr firstArg
+// where searchMethod.hasQualifiedName("com.xpn.xwiki.store","XWikiStoreInterface","search") and
+//     searchMethod = searchMethodInvocation.getMethod() and
 //    searchMethodInvocation.getArgument(0) = firstArg
 // select searchMethodInvocation, firstArg
 
@@ -55,7 +50,13 @@ import semmle.code.java.security.SqlInjectionQuery
 
 class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
     XWikiSearchSqlInjectionSink() {
-        any(XWikiSearchMethod m).getAReference().getArgument(0) = this.asExpr()
+      exists(Method searchMethod, MethodAccess searchMethodInvocation, Expr firstArg |
+        searchMethod.hasQualifiedName("com.xpn.xwiki.store", "XWikiStoreInterface", "search") and
+        searchMethod = searchMethodInvocation.getMethod() and
+        searchMethodInvocation.getArgument(0) = firstArg
+      |
+        firstArg = this.asExpr()
+      )
     }
 }
 
