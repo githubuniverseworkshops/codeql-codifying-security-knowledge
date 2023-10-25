@@ -114,48 +114,48 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
    <details>
    <summary>Hints</summary>
 
-   - The `java` module provides a class `Method` to reason about methods in a program.
-   - The class `Method` provides the member predicates `getName` and `hasName` to reason about the name of a method.
+   - The `java` module provides a class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) to reason about methods in a program.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
 
    </details>
 2. Refine the set of results by limiting it to methods named `getAverageRating` where the first parameter is named `fromsql`.
    <details>
    <summary>Hints</summary>
 
-   - The class `Method` provides the member predicate `getParameter` that expects an index to retrieve the corresponding parameter, if any.
-   - The class `Parameter` provides the member predicates `getName` and `hasName` to reason about the name of a parameter.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html)  provides the member predicate [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) that expects an index to retrieve the corresponding parameter, if any.
+   - The class [Parameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Variable.qll/type.Variable$Parameter.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a parameter.
 
    </details>
 3. Find all the methods with the name `getAverageRatingFromQuery`.
    <details>
    <summary>Hints</summary>
 
-   - The `java` module provides a class `Method` to reason about methods in a program.
-   - The class `Method` provides the member predicates `getName` and `hasName` to reason about the name of a method.
+   - The `java` module provides a class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html)  to reason about methods in a program.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html)  provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
 
    </details>
 4. Reduce the number of results by filtering uninteresting results.
    <details>
    <summary>Hints</summary>
 
-   - The class `Method` provides the member predicates `getBody` to reason about the statements that constitute a method.
-   - You can use the quantifier `exists` like `not exists(foo())` to determine if a predicate has no results.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html)  provides the member predicates [getBody](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getBody.0.html) to reason about the statements that constitute a method.
+   - You can use the quantifier [exists](https://codeql.github.com/docs/ql-language-reference/formulas/#exists) like `not exists(foo())` to determine if a predicate has no results.
 
    </details>
 5. Find all the calls to a method named `search`.
    <details>
    <summary>Hints</summary>
 
-   - Calls to methods are method accesses. The class `MethodAccess` allows you to reason about method accesses.
-   - The class `MethodAccess` provides a member predicate `getMethod` allows you to reason about the method being accessed.
-   - The class `MethodAccess` provides the member predicates `getName` and `hasName` to reason about the name of a method.
+   - Calls to methods are method accesses. The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) allows you to reason about method accesses.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides a member predicate [getMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getMethod.0.html) allows you to reason about the method being accessed.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
 
    </details>
 6. Find all the method accesses in the method `getAverageRatingFromQuery`.
    <details>
    <summary>Hints</summary>
 
-   - The class `MethodAccess` provides the member predicate [getEnclosingCallable](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getEnclosingCallable.0.html) to reason about the method or constructor containing the method access.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getEnclosingCallable](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getEnclosingCallable.0.html) to reason about the method or constructor containing the method access.
    - The class [Callable](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Callable.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
 
    </details>
@@ -163,13 +163,13 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
    <details>
    <summary>Hints</summary>
 
-  - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$getQualifiedName.0.html) useful fore debugging. The more efficient [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$hasQualifiedName.3.html) for restricting a method.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$getQualifiedName.0.html) useful fore debugging. The more efficient [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$hasQualifiedName.3.html) for restricting a method.
    </details>
 8. Use the qualified name of the method `search` to uniquely identify it.
    <details>
    <summary>Hints</summary>
 
-   - Use the `where` clause to restrict the results of the query.
+   - Use the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause to restrict the results of the query.
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$getQualifiedName.0.html) useful fore debugging. The more efficient [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Member$hasQualifiedName.3.html) for restricting a method.
 
    </details>
@@ -179,34 +179,34 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
 The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
 You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
 
-1. Transform the `select` clause into a class with the name `XWikiSearchMethod`
+1. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into a class with the name `XWikiSearchMethod`
    <details>
    <summary>Hints</summary>
 
-   The steps for transforming a `select` clause into a class are:
-   1. [Define a class](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class) and it's [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates). It will extend, through `extends`, from the class used in the `from` part of your [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses).
-   2. Copy the `where` part from the [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) into the [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates).
-   3. Replace the variable with type the class `extends` from with the `this` variable.
-   4. If the class relies on other variables from the `from` part then you can wrap the body of the characteristic predicate with an [exists](https://codeql.github.com/docs/ql-language-reference/formulas/#exists) quantifier to introduce those variable.
+   The steps for transforming a [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into a class are:
+   1. [Define a class](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class) and it's [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates). It will extend, through [extends](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class), from the class used in the [from](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part of your [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses).
+   2. Copy the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part from the [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) into the [characteristic predicate](https://codeql.github.com/docs/ql-language-reference/types/#characteristic-predicates).
+   3. Replace the variable with type the class [extends](https://codeql.github.com/docs/ql-language-reference/types/#defining-a-class) from with the [this](https://codeql.github.com/docs/ql-language-reference/types/#character-types) variable.
+   4. If the class relies on other variables from the [from](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) part then you can wrap the body of the characteristic predicate with an [exists](https://codeql.github.com/docs/ql-language-reference/formulas/#exists) quantifier to introduce those variable.
 
    </details>
 2. Find the first argument of all the invocations of the `search` method.
    <details>
    <summary>Hints</summary>
 
-   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html), which `XWikiSearchMethod` *extends*, provides the member predicate [getAReference](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Method$getAReference.0.html) that returns all the [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html)es referring the method.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides a member predicate [getMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getMethod.0.html) allows you to reason about the method being accessed.
    - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) and [getAnArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getAnArgument.0.html) to reason about arguments used by the method call.
 
    <details>
-3. Create the class `XWikiSearchSqlInjectionSink` that extends the `QueryInjectionSink` class to mark the first argument of an invocation to the method `search`  a *sink*.
+3. Create the class `XWikiSearchSqlInjectionSink` that extends the [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) class to mark the first argument of an invocation to the method `search`  a *sink*.
    <details>
    <summary>Hints</summary>
 
-   - The `QueryInjectionSink` can be imported from the `SqlInjectionQuery` module using `import semmle.code.java.security.SqlInjectionQuery`
-   - The `QueryInjectionSink` is a subclass of `DataFlow::Node`, so it represents a node in the dataflow graph.
-     You can use the member predicate `asExpr` to find a corresponding AST node.
-   - The class `Method` has a member predicate `getAReference`, that is inherited by our class `XWikiSearchMethod`, that provides all the method accesses targeting that method.
-   - The class `MethodAccess` has a member predicate `getArgument()` that provided an index returns the nth argument provided to the method access.
+   - The [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) can be imported through the [SqlInjectionQuery](https://github.com/github/codeql/blob/c7b9e405b77ffdc82b3f48e740cf5af0cfbeb028/java/ql/lib/semmle/code/java/security/SqlInjectionQuery.qll) module using `import semmle.code.java.security.SqlInjectionQuery`
+   - The [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) is a subclass of [DataFlow::Node](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/internal/DataFlowNodes.qll/type.DataFlowNodes$Public$Node.html), so it represents a node in the dataflow graph.
+     You can use the member predicate [asExpr](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/internal/DataFlowNodes.qll/predicate.DataFlowNodes$Public$Node$asExpr.0.html) to find a corresponding AST node.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides a member predicate [getMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getMethod.0.html) allows you to reason about the method being accessed.
+   - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) has a member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) that provided an index returns the nth argument provided to the method access.
 
    <details>
 
@@ -219,30 +219,30 @@ You can use [CheckPoint2.ql](./java/sql-injection/src/checkpoints/CheckPoint2.ql
    <details>
    <summary>Hints</summary>
 
-   - The class `Class` provides the member predicate `getAnAnnotation` to get the annotation that apply to the class.
-   - User defined annotations are declared using an [annotation type](https://docs.oracle.com/javase/tutorial/java/annotations/declaring.html). The class `Annotation`, returned by `getAnAnnotation`, provides the member predicate `getType` to get the annotation type of an annotation.
-   - The type `AnnotationType` is a specialization of an interface and allows us, among others, to reason about it's qualified name using the member predicates `getQualifiedName` and `hasQualifiedName`.
+   - The class [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html) provides the member predicate [hasAnnotation](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Annotation.qll/predicate.Annotation$Annotatable$hasAnnotation.0.html) to determine if the class is annotated.
+
    </details>
 2. Extend the query to include only classes that implement the interface `org.xwiki.script.service.ScriptService`.
    <details>
    <summary>Hints</summary>
 
-   - The class `Interface` represents all the Java interfaces in a program.
-   - The class `Interface` provides the member predicates `getQualifedName` and `hasQualifiedName` to reason about the qualified name of an Java interface.
+   - The class [Interface](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Interface.html) represents all the Java interfaces in a program.
+   - The class [Interface](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Interface.html) provides the member predicates [getQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$getQualifiedName.0.html) and [hasQualifiedName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$hasQualifiedName.2.html) to reason about the qualified name of an Java interface.
+
    </details>
-3. Transform the `select` clause into the class `XWikiScriptableComponent`.
+3. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into the class `XWikiScriptableComponent`.
 4. Use the class `XWikiScriptableComponent` and find all the public methods.
 5. Extends the query to find all the parameters of the just found public methods.
-6. Transform the `select` clause into the  class `XWikiScriptableComponentSource` that extends the class `RemoteFlowSource` and identifies parameters of the public methods defined in a scriptable component as sources of untrusted data.
+6. Transform the [where](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses) clause into the  class `XWikiScriptableComponentSource` that extends the class [RemoteFlowSource](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/type.FlowSources$RemoteFlowSource.html) and identifies parameters of the public methods defined in a scriptable component as sources of untrusted data.
 
    <details>
    <summary>Hints</summary>
 
-   - Reuse the class `XWikiScriptableComponentSource`, a subclass of `Class`, to reason about scriptable components.
-   - The class `Class` provides the member predicate `getAMethod` to get the Java methods that belong to a java class.
-   - The class `Method` provides the member predicate `isPublic` to determine if a method is publicly accessible.
-   - The class `Method` provides the member predicates `getParameter` and `getAParameter` to reason about parameters associated with a Java method.
-   - Subclasses of `RemoteFlowSource` require the implementation of a member predicate `getSourceType` to describe the type of the source.
+   - Reuse the class `XWikiScriptableComponentSource`, a subclass of [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html), to reason about scriptable components.
+   - The class [Class](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/type.Type$Class.html) provides the member predicate [getAMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Type.qll/predicate.Type$RefType$getAMethod.0.html) to get the Java methods that belong to a java class.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicate [isPublic](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Method$isPublic.0.html) to determine if a method is publicly accessible.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) and [getAParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getAParameter.0.html) to reason about parameters associated with a Java method.
+   - Subclasses of [RemoteFlowSource](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/type.FlowSources$RemoteFlowSource.html) require the implementation of a member predicate [getSourceType](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/dataflow/FlowSources.qll/predicate.FlowSources$RemoteFlowSource$getSourceType.0.html) to describe the type of the source.
      Use the following implementation:
 
      ```ql
