@@ -60,6 +60,8 @@ After finishing the technical prerequisites consider the following tutorials/gui
 
 ## :books: Resources
 
+- [QL tutorials](https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/)
+- [CodeQL for Java language guide](https://codeql.github.com/docs/codeql-language-guides/codeql-for-java/)
 - [CodeQL documentation](https://codeql.github.com/docs/)
 - [SQL injection](https://portswigger.net/web-security/sql-injection)
 - [QL language reference](https://codeql.github.com/docs/ql-language-reference/)
