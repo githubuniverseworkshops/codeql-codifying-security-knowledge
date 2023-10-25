@@ -275,7 +275,7 @@ To inform the data flow analysis of our new source we must extend the class [Rem
    select sink, source, sink, "Found SQL injection from $@", source, "source"
    ```
 
-2. Add the top of your query file, add the following meta data to inform the CodeQL Result Viewer to display paths.
+2. Add the following meta data to the top of your query (above the `import java`) to inform the CodeQL Result Viewer to display paths.
 
    ```ql
    /**
