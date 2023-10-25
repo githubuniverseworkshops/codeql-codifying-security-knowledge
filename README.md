@@ -3,7 +3,7 @@
 <h5 align="center">@thezefan, @lcartey, @rvermeulen</h3>
 
 <p align="center">
-  <a href="#mega-prerequisites">Prerequisites</a> •  
+  <a href="#mega-prerequisites">Prerequisites</a> •
   <a href="#books-resources">Resources</a> •
   <a href="#learning-objectives">Learning Objectives</a>
 </p>
@@ -85,7 +85,7 @@ To find the SQL injection we are going to:
 - Model the vulnerable method as a SQL sink so the SQL injection query is aware of this method.
 - Identify how the vulnerable method can be used by finding new XWiki specific entrypoints.
 - Model the new entrypoints as a source of untrusted data that can be used by CodeQL queries.
-  
+
 Once we have completed the above steps, we can see whether the models, our codified security knowledge, can uncover variants or possible
 other security issues.
 
