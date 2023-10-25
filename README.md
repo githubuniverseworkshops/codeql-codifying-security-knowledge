@@ -286,4 +286,4 @@ To inform the data flow analysis of our new source we must extend the class [Rem
 3. Run you query.
 
 With the final query we can commence with variant analysis.
-You can use [CheckPoint3.ql](./java/sql-injection/src/checkpoints/CheckPoint3.ql) as a starting point if you were unable to complete the this section.
+You can use [CheckPoint3.ql](./java/sql-injection/src/checkpoints/CheckPoint3.ql) as a starting point if you were unable to complete this section.
