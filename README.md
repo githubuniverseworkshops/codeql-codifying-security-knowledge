@@ -53,7 +53,10 @@ Before joining the workshop, there are a few items that you will need to install
 
    </details>
 
-After finishing the technical prerequisites follow the [QL tutorials](https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/) to ensure you have a basic understanding of the QL language so you can follow along.
+After finishing the technical prerequisites consider the following tutorials/guides for basic understanding of QL and Java query writing:
+
+- [QL tutorials](https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/)
+- [Basic query for Java code](https://codeql.github.com/docs/codeql-language-guides/basic-query-for-java-code/)
 
 ## :books: Resources
 
