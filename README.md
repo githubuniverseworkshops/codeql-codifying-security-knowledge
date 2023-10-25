@@ -57,6 +57,7 @@ After finishing the technical prerequisites consider the following tutorials/gui
 
 - [QL tutorials](https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/)
 - [Basic query for Java code](https://codeql.github.com/docs/codeql-language-guides/basic-query-for-java-code/)
+- [QL classes](https://codeql.github.com/docs/ql-language-reference/types/#classes)
 
 ## :books: Resources
 
