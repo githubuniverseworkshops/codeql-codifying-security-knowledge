@@ -175,7 +175,7 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
 
    </details>
 
-### 2. Identifying and modelling a SQL sink
+### 2. Modelling a SQL sink
 
 The following steps can be implemented in the exercise file [SqlInjection.ql](./java/sql-injection/src/SqlInjection.ql)
 You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql) as a starting point if you were unable to complete the previous section.
