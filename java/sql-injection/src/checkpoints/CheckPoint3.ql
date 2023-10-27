@@ -68,19 +68,19 @@ class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
 
 // Write a query that finds classes annotated with `org.xwiki.component.
 // from Class component
-// where component.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component")
+// where component.hasAnnotation("org.xwiki.component.annotation", "Component")
 // select component
 
 // Extend the query to include only classes that implement the interface `org.xwiki.script.service.ScriptService`.
 // from Class component, Interface scriptService
-// where component.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component") and
+// where component.hasAnnotation("org.xwiki.component.annotation", "Component") and
 //     scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
 //     component.extendsOrImplements(scriptService)
 // select component
 
 // Extend the query to find all the public methods of a component.
 // from Class component, Interface scriptService, Method publicMethod
-// where component.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component") and
+// where component.hasAnnotation("org.xwiki.component.annotation", "Component") and
 //     scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
 //     component.extendsOrImplements(scriptService) and
 //     component.getAMethod() = publicMethod and publicMethod.isPublic()
@@ -88,7 +88,7 @@ class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
 
 // Extends the query to find all the parameters of the just found public methods.
 // from Class component, Interface scriptService, Method publicMethod, Parameter parameter
-// where component.getAnAnnotation().getType().hasQualifiedName("org.xwiki.component.annotation", "Component") and
+// where component.hasAnnotation("org.xwiki.component.annotation", "Component")) and
 //     scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
 //     component.extendsOrImplements(scriptService) and
 //     component.getAMethod() = publicMethod and publicMethod.isPublic() and
@@ -98,10 +98,7 @@ class XWikiSearchSqlInjectionSink extends QueryInjectionSink {
 class XWikiScriptableComponentSource extends RemoteFlowSource {
    XWikiScriptableComponentSource() {
        exists(Class component, Interface scriptService, Method publicMethod, Parameter parameter |
-           component
-               .getAnAnnotation()
-               .getType()
-               .hasQualifiedName("org.xwiki.component.annotation", "Component") and
+           component.hasAnnotation("org.xwiki.component.annotation", "Component") and
            scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
            component.extendsOrImplements(scriptService) and
            component.getAMethod() = publicMethod and

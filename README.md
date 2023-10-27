@@ -251,10 +251,7 @@ To inform the data flow analysis of our new source we must extend the class [Rem
    class XWikiScriptableComponentSource extends RemoteFlowSource {
       XWikiScriptableComponentSource() {
          exists(Class component, Interface scriptService, Method publicMethod, Parameter parameter |
-            component
-                  .getAnAnnotation()
-                  .getType()
-                  .hasQualifiedName("org.xwiki.component.annotation", "Component") and
+            component.hasAnnotation("org.xwiki.component.annotation", "Component") and
             scriptService.hasQualifiedName("org.xwiki.script.service", "ScriptService") and
             component.extendsOrImplements(scriptService) and
             component.getAMethod() = publicMethod and
