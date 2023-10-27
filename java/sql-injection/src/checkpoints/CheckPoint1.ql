@@ -44,8 +44,7 @@ import java
 // Filter out the results with the qualified name of the method search
 from MethodAccess ma, Method m
 where 
-    ma.getMethod() = m and 
-    m.hasName("search") and
+    ma.getMethod() = m and
     ma.getEnclosingCallable().hasName("getAverageRatingFromQuery")  and 
     m.hasQualifiedName("com.xpn.xwiki.store", "XWikiStoreInterface", "search")
 select ma, m.getQualifiedName()
