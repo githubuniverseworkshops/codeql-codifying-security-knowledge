@@ -15,7 +15,7 @@ import java
 //     m.hasName("getAverageRating") and
 //     m.getNumberOfParameters() = 2 and
 //     m.getParameter(0).hasName("fromsql")
-// select m
+// select m, m.getFile().getAbsolutePath()
 
 // Find all the methods named getAverageRatingFromQuery
 // from Method m
@@ -31,7 +31,7 @@ import java
 // Find all methods calls, named method accesses, named search
 // from MethodAccess ma
 // where ma.getMethod().hasName("search")
-// select ma
+// select ma, ma.getMethod().getQualifiedName()
 
 // Find the fully qualified name of declaring type of the method search that is called in `getAverageRatingFromQuery`
 // from MethodAccess ma, Method m

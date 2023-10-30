@@ -119,12 +119,13 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a method.
 
    </details>
-2. Refine the set of results by limiting it to methods named `getAverageRating` where the first parameter is named `fromsql`.
+2. Refine the set of results by limiting it to methods named `getAverageRating`, that acceptes two parameters where the first parameter is named `fromsql`.
    <details>
    <summary>Hints</summary>
 
-   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html)  provides the member predicate [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) that expects an index to retrieve the corresponding parameter, if any.
+   - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) that expects an index to retrieve the corresponding parameter, if any, and [getNumberOfParameters](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getNumberOfParameters.0.html) that returns the number of formal paramerters.
    - The class [Parameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Variable.qll/type.Variable$Parameter.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a parameter.
+   - [getFile()](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/Location.qll/predicate.Location$Top$getFile.0.html) returns a `File` associated with an element which has a member predicate `getAbsolutePath()` useful fore debugging.
 
    </details>
 3. Find all the methods with the name `getAverageRatingFromQuery`.
