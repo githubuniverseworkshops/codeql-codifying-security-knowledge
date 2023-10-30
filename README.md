@@ -125,7 +125,7 @@ The following steps can be implemented in the exercise file [SqlInjection.ql](./
 
    - The class [Method](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/type.Member$Method.html) provides the member predicates [getParameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getParameter.1.html) that expects an index to retrieve the corresponding parameter, if any, and [getNumberOfParameters](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Member.qll/predicate.Member$Callable$getNumberOfParameters.0.html) that returns the number of formal paramerters.
    - The class [Parameter](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Variable.qll/type.Variable$Parameter.html) provides the member predicates [getName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$getName.0.html) and [hasName](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Element.qll/predicate.Element$Element$hasName.1.html) to reason about the name of a parameter.
-   - [getFile()](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/Location.qll/predicate.Location$Top$getFile.0.html) returns a `File` associated with an element which has a member predicate `getAbsolutePath()` useful fore debugging.
+   - [getFile()](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/Location.qll/predicate.Location$Top$getFile.0.html) returns a `File` associated with an element which has a member predicate [getAbsolutePath](https://codeql.github.com/codeql-standard-libraries/java/codeql/util/FileSystem.qll/predicate.FileSystem$Make$Container$getAbsolutePath.0.html) useful for debugging.
 
    </details>
 3. Find all the methods with the name `getAverageRatingFromQuery`.
@@ -188,7 +188,7 @@ You can use [CheckPoint1.ql](./java/sql-injection/src/checkpoints/CheckPoint1.ql
    - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides a member predicate [getMethod](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getMethod.0.html) allows you to reason about the method being accessed.
    - The class [MethodAccess](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/type.Expr$MethodAccess.html) provides the member predicate [getArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getArgument.1.html) and [getAnArgument](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/Expr.qll/predicate.Expr$MethodAccess$getAnArgument.0.html) to reason about arguments used by the method call.
 
-   <details>
+   </details>
 
 To inform the data flow analysis of our new sink we must extend the class [QueryInjectionSink](https://codeql.github.com/codeql-standard-libraries/java/semmle/code/java/security/QueryInjection.qll/type.QueryInjection$QueryInjectionSink.html) with the logic of our [select clause](https://codeql.github.com/docs/ql-language-reference/queries/#select-clauses)
 
