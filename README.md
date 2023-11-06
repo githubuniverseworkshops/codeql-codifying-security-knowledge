@@ -102,7 +102,7 @@ In the security advisory [GHSA-79rg-7mv3-jrr5](https://github.com/advisories/GHS
 
 From the Jira issue we learn that:
 
-1. There exists a method `getAverageRating` in the *Rating Script Service*.
+1. There exists a method `getAverageRating` in the `Rating Script Service`.
 2. The two parameters of `getAverageRating` are used in the class `AbstractRatingManager` to insecurely construct a SQL statement.
 
 We will use CodeQL to find the method and use the results to better understand how the SQL injection can manifest.
