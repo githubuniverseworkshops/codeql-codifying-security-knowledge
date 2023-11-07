@@ -1,6 +1,6 @@
 <h1 align="center">Codifying security knowledge</h1>
 <h3 align="center">Going from security advisory to CodeQL query</h3>
-<h5 align="center">@thezefan, @lcartey, @rvermeulen</h3>
+<h5 align="center">@theztefan, @lcartey, @rvermeulen</h3>
 
 <p align="center">
   <a href="#mega-prerequisites">Prerequisites</a> •
